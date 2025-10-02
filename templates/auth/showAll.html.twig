@@ -1,0 +1,14 @@
+<tr>
+    <th>ID</th>
+    <th>Nom</th>
+    <th>Email</th>
+</tr>
+{% for author in list %}
+<br>
+    <tr>
+        <td>{{ author.id }}</td>
+        <td>{{ author.username }}</td>
+        <td>{{ author.email }}</td>
+    </tr>
+
+{% endfor %}

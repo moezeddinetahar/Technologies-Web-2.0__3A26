@@ -4,7 +4,14 @@
 <div class="container mt-4">
     <h1>Livres Publiés</h1>
 
-   
+{{ form_start(RechercheBookType, {'method': 'get'}) }}
+{{ form_widget(RechercheBookType) }}
+<button class="btn btn-primary mt-2">Rechercher</button>
+{{ form_end(RechercheBookType) }}
+
+
+
+
     <div class="row mb-4">
         <div class="col-md-4">
             <div class="card bg-success text-white">
@@ -32,24 +39,24 @@
         </div>
     </div>
 
-
     {% if books|length > 0 %}
         <div class="table-responsive">
             <table border="1" class="table table-striped table-hover">
                 <thead class="table-dark">
                     <tr>
+                    <th>ref</th>
                         <th>Titre</th>
                         <th>Catégorie</th>
                         <th>Auteur</th>
                         <th>Readers</th>
                         <th>Date de Publication</th>
                         <th>Actions</th>
-
                     </tr>
                 </thead>
                 <tbody>
                     {% for book in books %}
                         <tr>
+                             <td>{{book.id}}</td>
                             <td>{{ book.title }}</td>
                             <td>{{ book.category }}</td>
                             <td>{{ book.author.username }}</td>
@@ -65,8 +72,8 @@
                             <td>{{ book.publicationDate|date('d/m/Y') }}</td>
                             <td>
                                <a href="{{ path('app_book_show', {'id': book.id}) }}">Voir</a>
-                                <a href="{{ path('app_book_edit', {'id': book.id}) }}">Modifier</a>
-                                <a href="{{ path('app_book_delete', {'id': book.id}) }}" >Supprimer</a>
+                               <a href="{{ path('app_book_edit', {'id': book.id}) }}">Modifier</a>
+                               <a href="{{ path('app_book_delete', {'id': book.id}) }}" >Supprimer</a>
                             </td>
                         </tr>
                     {% endfor %}

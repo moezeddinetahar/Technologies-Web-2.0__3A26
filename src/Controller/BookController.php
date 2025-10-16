@@ -13,6 +13,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 
 use App\Form\BookType;
+use App\Form\RechercheBookType;
+use App\Repository\AuthorRepository;
 
 final class BookController extends AbstractController
 {
@@ -51,23 +53,50 @@ final class BookController extends AbstractController
             'formBook' => $form->createView(),
         ]);
     }
-    
-    #[Route('/book/published', name: 'app_books_published')]
-    public function listPublishedBooks(BookRepository $repo): Response
-    {
-        $publishedBooks = $repo->findBy(['published' => true]);
-        $allBooks = $repo->findAll();
 
-        $publishedCount = count($publishedBooks);
+    #[Route(path: '/listAuthorByEmail', name: 'listAuthorByEmail')]
+    public function listAuthorByEmail(AuthorRepository $repo): Response
+    {
+        $authors = $repo->listAuthorByEmail();
+        return $this->render('author/showAll.html.twig', [
+            'authors' => $authors
+        ]);
+    }
+
+    #[Route('/book/published', name: 'app_books_published')]
+    public function listPublishedBooks(Request $request, BookRepository $repo): Response
+    {
+        $form = $this->createForm(RechercheBookType::class, null, [
+            'method' => 'GET',
+        ]);
+        $form->handleRequest($request);
+
+        $books = $repo->findBy(['published' => true]);
+
+        if ($form->isSubmitted())
+        {
+            $data = $form->getData();
+            if (!empty($data['id']))
+            {
+                $books = $repo->searchBookByid($data['id']);
+            }
+        }
+
+        $allBooks = $repo->findAll();
+        $publishedCount = count($books);
         $unpublishedCount = count($allBooks) - $publishedCount;
 
         return $this->render('book/show.html.twig', [
-            'books' => $publishedBooks,
+            'books' => $books,
             'publishedCount' => $publishedCount,
             'unpublishedCount' => $unpublishedCount,
             'totalCount' => count($allBooks),
+            'RechercheBookType' => $form->createView(),
         ]);
     }
+
+
+
     #[Route('/book/edit/{id}', name: 'app_book_edit')]
     public function edit(int $id, Request $request, ManagerRegistry $doctrine, BookRepository $repo): Response
     {

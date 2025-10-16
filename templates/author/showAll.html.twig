@@ -1,0 +1,33 @@
+
+
+
+{% block body %}
+    <h1>Liste des Auteurs</h1>
+
+    <table border="1" >
+        <tr>
+            <th>ID</th>
+            <th>User </th>
+            <th>Email</th>
+            <th>action</th>
+
+            
+        </tr>
+        {% for author in authors %}
+            <tr>
+                <td>{{ author.id }}</td>
+                <td>{{ author.username }}</td>
+                <td>{{ author.email }}</td>
+                <td>
+               <a href="{{ path('delete', {'id': author.id}) }}">Delete</a>
+             <a href="{{ path('showdetail', {'id': author.id}) }}">show</a>
+             <a href="{{ path('edit_author', {'id': author.id}) }}" >Edit</a>
+              
+             </td>
+
+              
+            </tr>
+     
+        {% endfor %}
+    </table>
+{% endblock %}

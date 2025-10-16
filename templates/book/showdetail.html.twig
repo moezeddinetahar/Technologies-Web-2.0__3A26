@@ -1,0 +1,66 @@
+{% block title %}Détails du Livre{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            {% if book %}
+                <div class="text-center">
+                    
+                    <h1 class="mb-4" style="font-weight: bold; font-size: 2.5rem;">Book</h1>
+
+                    
+                    <div class="card border-0 shadow-lg p-5">
+                        <div class="card-body">
+                            <p class="mb-3">
+                                <span style="font-weight: bold;">Title of Book:</span>
+                                <span>{{ book.title }}</span>
+                            </p>
+
+                            <p class="mb-3">
+                                <span style="font-weight: bold;">Publication date:</span>
+                                <span>{{ book.publicationDate|date('F j, Y H:i') }}</span>
+                            </p>
+
+                            <p class="mb-3">
+                                <span style="font-weight: bold;">Author:</span>
+                                <span>{{ book.author.username }}</span>
+                            </p>
+
+                            <p class="mb-4">
+                                <span style="font-weight: bold;">Category:</span>
+                                <span>{{ book.category }}</span>
+                            </p>
+
+                            <p class="mb-4">
+                                <span style="font-weight: bold;">Status:</span>
+                                <span>
+                                    {% if book.published %}
+                                        <span class="badge bg-success">Published</span>
+                                    {% else %}
+                                        <span class="badge bg-warning">Not Published</span>
+                                    {% endif %}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+
+               
+                    <div class="mt-4">
+                        <a href="{{ path('app_book_edit', {'id': book.id}) }}" class="btn btn-primary me-2">
+                            Edit
+                        </a>
+                        <a href="{{ path('app_book_delete', {'id': book.id}) }}" class="btn btn-danger me-2" onclick="return confirm('Are you sure?')">
+                            Delete
+                        </a>
+                        <a href="{{ path('app_books_published') }}" class="btn btn-secondary">
+                            Back
+                        </a>
+                    </div>
+                </div>
+        
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

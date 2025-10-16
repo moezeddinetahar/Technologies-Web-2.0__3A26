@@ -1,0 +1,75 @@
+{% block title %}Livres Publiés{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1>Livres Publiés</h1>
+
+   
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Livres Publiés</h5>
+                    <p class="card-text fs-3">{{ publishedCount }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Livres Non Publiés</h5>
+                    <p class="card-text fs-3">{{ unpublishedCount }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total de Livres</h5>
+                    <p class="card-text fs-3">{{ totalCount }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {% if books|length > 0 %}
+        <div class="table-responsive">
+            <table border="1" class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Titre</th>
+                        <th>Catégorie</th>
+                        <th>Auteur</th>
+                        <th>Date de Publication</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for book in books %}
+                        <tr>
+                            <td>{{ book.title }}</td>
+                            <td>{{ book.category }}</td>
+                            <td>{{ book.author.username }}</td>
+                            <td>{{ book.publicationDate|date('d/m/Y') }}</td>
+                            <td>
+                               <a href="{{ path('app_book_show', {'id': book.id}) }}">Voir</a>
+                                <a href="{{ path('app_book_edit', {'id': book.id}) }}">Modifier</a>
+                                <a href="{{ path('app_book_delete', {'id': book.id}) }}" >Supprimer</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <strong>No Books found</strong>
+            <p>Aucun livre publié n'a été trouvé pour le moment.</p>
+            <a href="{{ path('book_add') }}" class="btn btn-primary mt-2">Ajouter un livre</a>
+        </div>
+    {% endif %}
+
+    <a href="{{ path('app_book') }}" class="btn btn-secondary mt-3">Retour</a>
+</div>
+{% endblock %}

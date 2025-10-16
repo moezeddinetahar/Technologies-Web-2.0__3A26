@@ -1,0 +1,10 @@
+{% block title %}Ajouter un Livre{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1>Ajouter un livre</h1>
+    {{ form_start(formBook) }}
+    {{ form_widget(formBook) }}
+    {{ form_end(formBook) }}
+</div>
+{% endblock %}

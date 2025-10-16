@@ -1,0 +1,29 @@
+
+
+{% block title %}Détails de l'auteur{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h2 class="mb-3 text-center">Détails de l'auteur</h2>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>ID</th>
+            <td>{{ author.id }}</td>
+        </tr>
+        <tr>
+            <th>Nom</th>
+            <td>{{ author.username }}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ author.email }}</td>
+        </tr>
+      
+    </table>
+
+    <div class="mt-3">
+        <a href="{{ path('showAll') }}" class="btn btn-secondary">⬅ Retour</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% block body %}
+    <h1>Liste des Reader</h1>
+        <a href="{{ path('reader_add') }}" >Add</a>
+
+    <table border="1" cellpadding="8" cellspacing="0">
+        <tr>
+            <th>id</th>
+             <th>book</th>
+            <th>Nom d’utilisateur</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for reader in readers %}
+            <tr>
+                <td>{{ reader.id }}</td>
+                <td>{{ reader.username }}</td>
+                <td>
+            
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">Aucun lecteur trouvé.</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

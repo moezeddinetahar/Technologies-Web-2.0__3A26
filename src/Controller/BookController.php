@@ -24,38 +24,40 @@ final class BookController extends AbstractController
         ]);
     }
 
-#[Route('/book/add', name: 'book_add')]
-public function addBook(Request $request, ManagerRegistry $doctrine): Response
-{
-    $book = new Book();
-    $book->setPublished(true);
-   
-    $form = $this->createForm(BookType::class, $book);
-    $form->handleRequest($request);
+    #[Route('/book/add', name: 'book_add')]
+    public function addBook(Request $request, ManagerRegistry $doctrine): Response
+    {
+        $book = new Book();
+        $book->setPublished(true);
 
-    if ($form->isSubmitted() && $form->isValid()) {
-        $em = $doctrine->getManager();
+        $form = $this->createForm(BookType::class, $book);
+        $form->handleRequest($request);
 
-        
-        $author = $book->getAuthor();
-        $author->setNbBooks($author->getNbBooks() + 1);
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $em = $doctrine->getManager();
 
-        $em->persist($book);
-        $em->flush();
 
-        return $this->redirectToRoute('app_books_published');
+            $author = $book->getAuthor();
+            $author->setNbBooks($author->getNbBooks() + 1);
+
+            $em->persist($book);
+            $em->flush();
+
+            return $this->redirectToRoute('app_books_published');
+        }
+
+        return $this->render('book/addbook.html.twig', [
+            'formBook' => $form->createView(),
+        ]);
     }
-
-    return $this->render('book/addbook.html.twig', [
-        'formBook' => $form->createView(),
-    ]);
-}
- #[Route('/books/published', name: 'app_books_published')]
+    
+    #[Route('/book/published', name: 'app_books_published')]
     public function listPublishedBooks(BookRepository $repo): Response
     {
         $publishedBooks = $repo->findBy(['published' => true]);
         $allBooks = $repo->findAll();
-        
+
         $publishedCount = count($publishedBooks);
         $unpublishedCount = count($allBooks) - $publishedCount;
 
@@ -69,22 +71,23 @@ public function addBook(Request $request, ManagerRegistry $doctrine): Response
     #[Route('/book/edit/{id}', name: 'app_book_edit')]
     public function edit(int $id, Request $request, ManagerRegistry $doctrine, BookRepository $repo): Response
     {
-        
+
         $book = $repo->find($id);
 
-     
 
-       
+
+
         $form = $this->createForm(BookType::class, $book);
 
-       
+
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid())
+        {
             $em = $doctrine->getManager();
             $em->flush();
 
-            
+
             return $this->redirectToRoute('app_books_published');
         }
 
@@ -96,10 +99,10 @@ public function addBook(Request $request, ManagerRegistry $doctrine): Response
     #[Route('/book/{id}', name: 'app_book_show')]
     public function show(int $id, BookRepository $repo): Response
     {
-       
+
         $book = $repo->find($id);
 
-    
+
         return $this->render('book/showdetail.html.twig', [
             'book' => $book,
         ]);
@@ -107,17 +110,16 @@ public function addBook(Request $request, ManagerRegistry $doctrine): Response
     #[Route('/book/delete/{id}', name: 'app_book_delete')]
     public function delete(int $id, ManagerRegistry $doctrine, BookRepository $repo): Response
     {
-        
+
         $book = $repo->find($id);
 
-        
+
         $em = $doctrine->getManager();
         $em->remove($book);
         $em->flush();
 
-       
+
 
         return $this->redirectToRoute('app_books_published');
     }
-    
 }

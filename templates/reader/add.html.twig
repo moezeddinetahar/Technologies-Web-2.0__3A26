@@ -1,0 +1,9 @@
+
+
+{% block body %}
+    <h1>Ajouter un lecteur</h1>
+    {{ form_start(formReader) }}
+        {{ form_widget(formReader) }}
+        <button class="btn btn-primary">Enregistrer</button>
+    {{ form_end(formReader) }}
+{% endblock %}

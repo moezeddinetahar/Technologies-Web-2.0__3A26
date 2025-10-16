@@ -41,8 +41,10 @@
                         <th>Titre</th>
                         <th>Catégorie</th>
                         <th>Auteur</th>
+                        <th>Readers</th>
                         <th>Date de Publication</th>
                         <th>Actions</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -51,6 +53,15 @@
                             <td>{{ book.title }}</td>
                             <td>{{ book.category }}</td>
                             <td>{{ book.author.username }}</td>
+                            <td>
+                                {% if book.readers|length > 0 %}
+                                    {% for reader in book.readers %}
+                                        {{ reader.username }}{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    Aucun lecteur
+                                {% endif %}
+                            </td>
                             <td>{{ book.publicationDate|date('d/m/Y') }}</td>
                             <td>
                                <a href="{{ path('app_book_show', {'id': book.id}) }}">Voir</a>

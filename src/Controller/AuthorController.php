@@ -21,16 +21,16 @@ final class AuthorController extends AbstractController
             'controller_name' => 'AuthorController',
         ]);
     }
-    #[Route('/auth/{name}',name: 'ShowAuthor')]
-    public function ShowAuthor($name):Response
+    #[Route('/auth/{name}', name: 'ShowAuthor')]
+    public function ShowAuthor($name): Response
     {
 
-       return $this->render('author/Show.html.twig',['nom'=>$name]);
-}
+        return $this->render('author/Show.html.twig', ['nom' => $name]);
+    }
 
-    
 
-     #[Route('/authors', name: 'app_list_authors')]
+
+    #[Route('/authors', name: 'app_list_authors')]
     public function listAuthors(): Response
     {
         $authors = [
@@ -67,9 +67,8 @@ final class AuthorController extends AbstractController
         return $this->render('author/showAll.html.twig', [
             'authors' => $authors
         ]);
-
     }
-    #[Route("/add","add")]
+    #[Route("/add", "add")]
     public function add(ManagerRegistry $doctrine)
     {
         $entityManager = $doctrine->getManager();
@@ -78,51 +77,48 @@ final class AuthorController extends AbstractController
         $author->setUsername('foulen2');
         $entityManager->persist($author);
         $entityManager->flush();
-        
-       return $this->redirectToRoute('showAll');
-        
 
+        return $this->redirectToRoute('showAll');
     }
-    #[Route("/delete/{id}","delete")]
-    public function delete(ManagerRegistry $doctrine,$id,AuthorRepository $repo)
+    #[Route("/delete/{id}", "delete")]
+    public function delete(ManagerRegistry $doctrine, $id, AuthorRepository $repo)
     {
-        
+
         $entityManager = $doctrine->getManager();
-        $author=$repo->find($id);
+        $author = $repo->find($id);
         $entityManager->remove($author);
         $entityManager->flush();
-   
+
         return $this->redirectToRoute('showAll');
     }
 
 
-       #[Route('/showdetail/{id}', name: 'showdetail')]
+    #[Route('/showdetail/{id}', name: 'showdetail')]
 
-     public function showById($id,AuthorRepository $repo){
-        $author=$repo->find($id);
-        return $this->render('/author/showDetail.html.twig',['author'=>$author]);
-
-
-
+    public function showById($id, AuthorRepository $repo)
+    {
+        $author = $repo->find($id);
+        return $this->render('/author/showDetail.html.twig', ['author' => $author]);
     }
     #[Route('/addForm', name: 'addform')]
     public function addForm(Request $request, ManagerRegistry $doctrine)
     {
         $author = new Author();
 
-        
+
         $form = $this->createForm(AuthorType::class, $author);
 
-        
+
         $form->add('save', SubmitType::class, [
             'label' => 'Ajouter',
             'attr' => ['class' => 'btn btn-success mt-2']
         ]);
 
-      
+
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid())
+        {
             $em = $doctrine->getManager();
             $em->persist($author);
             $em->flush();
@@ -130,40 +126,49 @@ final class AuthorController extends AbstractController
             return $this->redirectToRoute('showAll');
         }
 
-       
+
         return $this->render('author/add.html.twig', [
             'formulaire' => $form->createView(),
         ]);
     }
     #[Route('/edit/{id}', name: 'edit_author')]
-public function edit($id, Request $request, ManagerRegistry $doctrine): Response
-{
-    $em = $doctrine->getManager();
-    $author = $em->getRepository(Author::class)->find($id);
+    public function edit($id, Request $request, ManagerRegistry $doctrine): Response
+    {
+        $em = $doctrine->getManager();
+        $author = $em->getRepository(Author::class)->find($id);
 
 
 
-    
-    $form = $this->createForm(AuthorType::class, $author);
 
-   
-    $form->add('save', SubmitType::class, [
-        'label' => 'Modifier',
-        'attr' => ['class' => 'btn btn-primary mt-2']
-    ]);
+        $form = $this->createForm(AuthorType::class, $author);
 
-    
-    $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) {
-        $em->flush();
-        return $this->redirectToRoute('showAll');
+        $form->add('save', SubmitType::class, [
+            'label' => 'Modifier',
+            'attr' => ['class' => 'btn btn-primary mt-2']
+        ]);
+
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $em->flush();
+            return $this->redirectToRoute('showAll');
+        }
+
+        return $this->render('author/edit.html.twig', [
+            'formulaire' => $form->createView(),
+            'author' => $author,
+        ]);
     }
 
-    return $this->render('author/edit.html.twig', [
-        'formulaire' => $form->createView(),
-        'author' => $author,
-    ]);
-}
-
+    #[Route(path: '/ShowAllAuthorQR', name: 'ShowAllAuthorQR')]
+    public function ShowAllAuthorQR(AuthorRepository $repo): Response
+    {
+        $authors = $repo->ShowAllAuthorQR();
+        return $this->render('author/showAll.html.twig', [
+            'authors' => $authors
+        ]);
+    }
 }
